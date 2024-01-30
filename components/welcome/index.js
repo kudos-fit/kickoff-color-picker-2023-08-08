@@ -21,12 +21,21 @@ const Welcome = () => {
       ...prevPalette,
       [colorKey]: newValues
     }));
+   };
+  
+  const handleSave = (e) => {
+    e.preventDefault();
+    console.log('Saved palette:', palette);
   };
 
   return (
     <div className={s.welcomeContainer}>
       <section className={s.paletteCreate}>
-      <h1>Create Palette</h1>
+        <h1>Create Palette</h1>
+        <form onSubmit={handleSave}>
+          <button className={s.button} type="submit">
+            Save
+          </button>
         <div className={s.colorPickers}>
           {Object.entries(palette).map(([colorKey, colorValues]) => {
             return (
@@ -39,6 +48,7 @@ const Welcome = () => {
             )
           })}
           </div>
+        </form>
       </section>
       <section className={s.paletteList}>
         <h2>Palette List</h2>

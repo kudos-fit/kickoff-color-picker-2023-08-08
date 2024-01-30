@@ -34,22 +34,25 @@
 }
 
 .button {
-  height: 100%;
   outline: none;
   text-decoration: none;
   text-align: center;
   line-height: normal;
-  font-size: 1rem;
   font-weight: 400;
   border-style: solid;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding: 8px 16px;
   letter-spacing: 0.5px;
-  border-radius: 0 3px 3px 0;
+  border-radius: 4px;
   border-width: 1px;
   background-color: #830051;
   border-color: #830051;
   color: white;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.button:hover {
+  background-color: #bd2f87;
 }
 
 .button:disabled {
