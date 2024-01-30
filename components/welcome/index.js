@@ -14,10 +14,11 @@ const defaultPalette = {
 };
 
 const Welcome = () => {
-  const [palette, setPalette] = useState(defaultPalette);
+  const [currentPalette, setCurrentPalette] = useState(defaultPalette);
+  const [palettes, setPalettes] = useState();
 
-   const updateColor = (colorKey, newValues) => {
-    setPalette(prevPalette => ({
+  const updateColor = (colorKey, newValues) => {
+    setCurrentPalette(prevPalette => ({
       ...prevPalette,
       [colorKey]: newValues
     }));
@@ -28,6 +29,21 @@ const Welcome = () => {
     console.log('Saved palette:', palette);
   };
 
+
+ useEffect(() => {
+    const fetchPalettes = async () => {
+      const { status, data } = await axios.get("/api/palette");
+
+      if (status === 200) {
+        setPalettes(data);
+      } else {
+        throw new Error("Error connecting to server");
+      }
+    };
+
+    fetchPalettes();
+  }, [setPalettes, axios]);
+
   return (
     <div className={s.welcomeContainer}>
       <section className={s.paletteCreate}>
@@ -37,7 +53,7 @@ const Welcome = () => {
             Save
           </button>
         <div className={s.colorPickers}>
-          {Object.entries(palette).map(([colorKey, colorValues]) => {
+          {Object.entries(currentPalette).map(([colorKey, colorValues]) => {
             return (
               <ColorPicker
                 key={colorKey}
@@ -51,7 +67,16 @@ const Welcome = () => {
         </form>
       </section>
       <section className={s.paletteList}>
-        <h2>Palette List</h2>
+        <h2>Saved Palettes</h2>
+        {palettes?.map((palette) => (
+        <div key={palette.id} className={s.paletteContainer}>
+          <div className={s.colorSquare} style={{ backgroundColor: palette.color1 }}></div>
+          <div className={s.colorSquare} style={{ backgroundColor: palette.color2 }}></div>
+          <div className={s.colorSquare} style={{ backgroundColor: palette.color3 }}></div>
+          <div className={s.colorSquare} style={{ backgroundColor: palette.color4 }}></div>
+          <div className={s.colorSquare} style={{ backgroundColor: palette.color5 }}></div>
+        </div>
+      ))}
       </section>
     </div>
   );
