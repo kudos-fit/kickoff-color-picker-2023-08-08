@@ -13,9 +13,21 @@ const defaultPalette = {
   'color5': { 'R': '255', 'G': '0', 'B': '255' },
 };
 
+const parseRGB = (rgbString) => {
+  const colors = rgbString.replace(/[rgb()]/g, '').split(',').map(c => c.trim());
+  
+  return {
+    R: colors[0] || '0',
+    G: colors[1] || '0',
+    B: colors[2] || '0'
+  };
+}
+
 const Welcome = () => {
   const [currentPalette, setCurrentPalette] = useState(defaultPalette);
+  const [editingPaletteId, setEditingPaletteId] = useState(null);
   const [palettes, setPalettes] = useState();
+  const [loading, setLoading] = useState(true);
 
   const updateColor = (colorKey, newValues) => {
     setCurrentPalette(prevPalette => ({
@@ -25,6 +37,7 @@ const Welcome = () => {
   };
 
   const fetchPalettes = async () => {
+    setLoading(true);
     try {
       const { status, data } = await axios.get("/api/palette");
       
@@ -35,7 +48,20 @@ const Welcome = () => {
       }
     } catch (error) {
       console.error('Error fetching palettes:', error);
+    } finally {
+      setLoading(false)
     }
+  };
+
+  const editPalette = (palette) => {
+    setEditingPaletteId(palette.id);
+    setCurrentPalette({
+      color1: parseRGB(palette.color1),
+      color2: parseRGB(palette.color2),
+      color3: parseRGB(palette.color3),
+      color4: parseRGB(palette.color4),
+      color5: parseRGB(palette.color5),
+    });
   };
   
   const handleSave = async (e) => {
@@ -48,12 +74,28 @@ const Welcome = () => {
         color4: `rgb(${currentPalette.color4.R}, ${currentPalette.color4.G}, ${currentPalette.color4.B})`,
         color5: `rgb(${currentPalette.color5.R}, ${currentPalette.color5.G}, ${currentPalette.color5.B})`,
       };
-      await axios.post('/api/palette', formattedPalette);
+
+      if (editingPaletteId) {
+        await axios.put('/api/palette', { id: editingPaletteId, ...formattedPalette });
+      } else {
+        await axios.post('/api/palette', formattedPalette);
+      }
       await fetchPalettes();
     } catch (error) {
       console.error('Error saving palette:', error);
+    } finally {
+      setEditingPaletteId(null)
     }
   };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete('/api/palette', { data: { id } });
+      await fetchPalettes();
+    } catch (error) {
+      console.error('Error deleting palette:', error);
+    }
+  }
 
   useEffect(() => {
     fetchPalettes();
@@ -62,10 +104,10 @@ const Welcome = () => {
   return (
     <div className={s.welcomeContainer}>
       <section className={s.paletteCreate}>
-        <h1>Create Palette</h1>
+        <h1>{editingPaletteId ? `Edit Palette #${editingPaletteId}` : 'Create Palette'}</h1>
         <form onSubmit={handleSave}>
           <button className={s.button} type="submit">
-            Save
+            {`Save ${ editingPaletteId ? ' Edits' : ''}`}
           </button>
         <div className={s.colorPickers}>
           {Object.entries(currentPalette).map(([colorKey, colorValues]) => {
@@ -83,15 +125,28 @@ const Welcome = () => {
       </section>
       <section className={s.paletteList}>
         <h2>Saved Palettes</h2>
-        {palettes?.map((palette) => (
-        <div key={palette.id} className={s.paletteContainer}>
-          <div className={s.colorSquare} style={{ backgroundColor: palette.color1 }}></div>
-          <div className={s.colorSquare} style={{ backgroundColor: palette.color2 }}></div>
-          <div className={s.colorSquare} style={{ backgroundColor: palette.color3 }}></div>
-          <div className={s.colorSquare} style={{ backgroundColor: palette.color4 }}></div>
-          <div className={s.colorSquare} style={{ backgroundColor: palette.color5 }}></div>
-        </div>
-      ))}
+        {loading ? <span>Loading...</span> : null}
+        {!loading && !palettes.length ? <span>No palettes saved</span> : null}
+        {!loading && palettes.length ? palettes?.map((palette) => (
+          <div key={palette.id}>
+            <h4>Palette #{palette.id}</h4>
+            <div key={palette.id} className={s.paletteContainer}>
+              <div className={s.colorSquare} style={{ backgroundColor: palette.color1 }} />
+              <div className={s.colorSquare} style={{ backgroundColor: palette.color2 }} />
+              <div className={s.colorSquare} style={{ backgroundColor: palette.color3 }} />
+              <div className={s.colorSquare} style={{ backgroundColor: palette.color4 }} />
+              <div className={s.colorSquare} style={{ backgroundColor: palette.color5 }} />
+            </div>
+            <div className={s.buttonsPanel}>
+              <button onClick={() => editPalette(palette)} className={s.button}>
+                Edit
+              </button>
+              <button onClick={() => handleDelete(palette.id)} className={s.button}>
+                Delete
+              </button>
+            </div>
+          </div>
+      )): null}
       </section>
     </div>
   );

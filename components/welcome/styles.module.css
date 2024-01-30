@@ -78,6 +78,7 @@
   min-width: 300px;
   height: 100vh;
   padding: 0 16px;
+  overflow: scroll;
 }
 
 .paletteContainer {
@@ -100,3 +101,7 @@
   border-bottom-right-radius: 4px;
 }
 
+.buttonsPanel {
+  display: flex;
+  gap: 8px;
+}
