@@ -22,27 +22,42 @@ const Welcome = () => {
       ...prevPalette,
       [colorKey]: newValues
     }));
-   };
-  
-  const handleSave = (e) => {
-    e.preventDefault();
-    console.log('Saved palette:', palette);
   };
 
-
- useEffect(() => {
-    const fetchPalettes = async () => {
+  const fetchPalettes = async () => {
+    try {
       const { status, data } = await axios.get("/api/palette");
-
+      
       if (status === 200) {
         setPalettes(data);
       } else {
-        throw new Error("Error connecting to server");
+        throw new Error("Error fetching palettes");
       }
-    };
+    } catch (error) {
+      console.error('Error fetching palettes:', error);
+    }
+  };
+  
+  const handleSave = async (e) => {
+    e.preventDefault();
+    try {
+      const formattedPalette = {
+        color1: `rgb(${currentPalette.color1.R}, ${currentPalette.color1.G}, ${currentPalette.color1.B})`,
+        color2: `rgb(${currentPalette.color2.R}, ${currentPalette.color2.G}, ${currentPalette.color2.B})`,
+        color3: `rgb(${currentPalette.color3.R}, ${currentPalette.color3.G}, ${currentPalette.color3.B})`,
+        color4: `rgb(${currentPalette.color4.R}, ${currentPalette.color4.G}, ${currentPalette.color4.B})`,
+        color5: `rgb(${currentPalette.color5.R}, ${currentPalette.color5.G}, ${currentPalette.color5.B})`,
+      };
+      await axios.post('/api/palette', formattedPalette);
+      await fetchPalettes();
+    } catch (error) {
+      console.error('Error saving palette:', error);
+    }
+  };
 
+  useEffect(() => {
     fetchPalettes();
-  }, [setPalettes, axios]);
+  }, []);
 
   return (
     <div className={s.welcomeContainer}>
