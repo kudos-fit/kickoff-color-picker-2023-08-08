@@ -1,0 +1,11 @@
+.colorPicker {
+  display: flex;
+  flex-direction: column;
+}
+
+.colorSquare {
+  display: flex;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 8px;
+}
