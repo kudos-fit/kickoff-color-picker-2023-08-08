@@ -25,19 +25,24 @@ const Welcome = () => {
 
   return (
     <div className={s.welcomeContainer}>
-      <h1 className={s.welcome}>Create Palette</h1>
-      <div className={s.colorPickers}>
-        {Object.entries(palette).map(([colorKey, colorValues]) => {
-          return (
-            <ColorPicker
-              key={colorKey}
-              colorKey={colorKey}
-              colorValues={colorValues}
-              updateColor={updateColor}
-            />
-          )
-        })}
-      </div>
+      <section className={s.paletteCreate}>
+      <h1>Create Palette</h1>
+        <div className={s.colorPickers}>
+          {Object.entries(palette).map(([colorKey, colorValues]) => {
+            return (
+              <ColorPicker
+                key={colorKey}
+                colorKey={colorKey}
+                colorValues={colorValues}
+                updateColor={updateColor}
+              />
+            )
+          })}
+          </div>
+      </section>
+      <section className={s.paletteList}>
+        <h2>Palette List</h2>
+      </section>
     </div>
   );
 };
