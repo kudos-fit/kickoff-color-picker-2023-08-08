@@ -1,15 +1,6 @@
 .welcomeContainer {
   display: flex;
-  /* flex-direction: column; */
-  /* align-items: center; */
-  /* padding: 10px 20px; */
 }
-/* 
-.welcome {
-  text-align: center;
-  margin-top: 150px;
-  font-size: 2.5rem;
-} */
 
 .form {
   width: 100%;
