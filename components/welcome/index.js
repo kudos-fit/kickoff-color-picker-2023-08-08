@@ -3,54 +3,16 @@ import axios from "axios";
 
 import s from "./styles.module.css";
 
-// this is just an example
-// feel free to use class based components and whatever paradigms you're most comfortable with
+const defaultPalette = { 'R': '255', 'G': '0', 'B': '0'}
 const Welcome = () => {
-  const [greeting, setGreeting] = useState(null);
-  const [value, setValue] = useState("");
+  const [palette, setPalette] = useState(defaultPalette);
 
-  useEffect(() => {
-    const fetchGreeting = async () => {
-      const { status, data } = await axios.get("/api/greeting");
-
-      if (status === 200) {
-        setGreeting(data);
-      } else {
-        throw new Error("Error connecting to server");
-      }
-    };
-
-    fetchGreeting();
-  }, [setGreeting, axios]);
-
-  const updateGreeting = async () => {
-    if (!value) return;
-
-    const { status, data } = await axios.put("/api/greeting", {
-      id: greeting.id,
-      body: value,
-    });
-
-    setGreeting(data);
-    setValue("");
-  };
-
-  if (!greeting) return null;
-
+  const paletteColor = `rgb(${palette.R}, ${palette.G},${palette.B})`
+  
   return (
     <div className={s.welcomeContainer}>
-      <h1 className={s.welcome}>{greeting.body}</h1>
-      <div className={s.form}>
-        <input
-          className={s.input}
-          value={value}
-          onChange={(ev) => setValue(ev.target.value)}
-          placeholder="Enter a new greeting"
-        />
-        <button className={s.button} onClick={updateGreeting} disabled={!value}>
-          Update
-        </button>
-      </div>
+      <h1 className={s.welcome}>Create Palette</h1>
+      <div className={s.colorSquare} style={{ backgroundColor: paletteColor }} />
     </div>
   );
 };
