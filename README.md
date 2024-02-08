@@ -4,7 +4,7 @@
 
 ### Phase 1 -- Picker
 
-Build a simple web based color picker. The picker should:
+Build a simple web-based color picker. The picker should:
 
 1. Take input for RGB values
 2. Display the current color
@@ -17,7 +17,7 @@ Build a form to create a palette of 5 colors.
 
 Persist palettes to the database.
 
-1. Add ability to save multiple palettes.
+1. Add the ability to save multiple palettes.
 2. Don't worry about palette owners. They're global.
 3. Display all the persisted palettes in the UI.
 4. Enable deleting of palettes.
@@ -29,9 +29,9 @@ Feel free to look up syntax while working. Just don't copy any code verbatim. Co
 
 This codebase contains a [Next.js](https://nextjs.org/) React app. The scaffold is in place to allow you to focus on the exercise instead of the setup. However, if you're more comfortable with your own tools, feel free to replace any or all of it.
 
-Please take 2 hours to complete the exercise. If you choose to setup the app yourself instead of using the scaffold, take an extra 30min to get everything in place.
+This is designed to take between 2-4 hours.
 
-There's a lot to do. Don't sweat the details. Just focus on getting through as much as you can. Finishing everything isn't a requirement for success in the exercise. If you do finish early, take your pick of refactoring, styling, or adding features.
+There's a lot to do. Don't sweat the details. If you do finish early, take your pick of refactoring, styling, or adding features.
 
 ## Setup
 
