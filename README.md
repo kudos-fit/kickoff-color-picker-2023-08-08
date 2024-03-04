@@ -23,6 +23,13 @@ Persist palettes to the database.
 4. Enable deleting of palettes.
 5. Enable editing of palettes.
 
+### Phase 4 -- Search
+
+Build a search for the persisted palettes.
+
+1. Add the ability to search your saved palettes by name.
+2. Do search logic on the backend using SQL. **do not filter using javascript on the frontend of backend**
+
 ## Details
 
 Feel free to look up syntax while working. Just don't copy any code verbatim. Come up with your own UI.
