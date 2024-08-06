@@ -28,7 +28,7 @@ Persist palettes to the database.
 Build a search for the persisted palettes.
 
 1. Add the ability to search your saved palettes by name.
-2. Do search logic on the backend using SQL. **do not filter using javascript on the frontend of backend**
+2. Do search logic on the backend using SQL. **do not filter using javascript on the frontend or backend**
 
 ## Details
 
